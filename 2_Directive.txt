@@ -1,0 +1,124 @@
+/*
+ * Directives in Angular 18
+ */
+
+// Directives in Angular extend the behavior of elements. There are three types:
+// 1. Component Directives (which have templates, like components)
+// 2. Structural Directives (e.g., *ngIf, *ngFor)
+// 3. Attribute Directives (modify element behavior)
+
+
+// Example 1: Attribute Directive (Modifies element behavior)
+import { Directive, ElementRef, Renderer2, HostListener } from '@angular/core';
+
+@Directive({
+  selector: '[appHighlight]'
+})
+export class HighlightDirective {
+  constructor(private el: ElementRef, private renderer: Renderer2) {}
+
+  @HostListener('mouseenter') onMouseEnter() {
+    this.renderer.setStyle(this.el.nativeElement, 'backgroundColor', 'yellow');
+  }
+
+  @HostListener('mouseleave') onMouseLeave() {
+    this.renderer.setStyle(this.el.nativeElement, 'backgroundColor', 'transparent');
+  }
+}
+
+/*
+ * Explanation:
+ * - The `@Directive` decorator marks a class as an Angular directive.
+ * - `selector`: Defines how the directive is used (`[appHighlight]` applies it as an attribute).
+ * - `ElementRef` and `Renderer2` are used to manipulate the DOM safely.
+ * - `@HostListener` listens to events like `mouseenter` and `mouseleave` to change styles dynamically.
+ */
+
+// Usage in an HTML file:
+// <p appHighlight>Hover over me to see the effect!</p>
+
+
+// Example 2: Structural Directive (*ngIf example)
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-conditional-display',
+  template: `
+    <button (click)="toggleMessage()">Toggle Message</button>
+    <p *ngIf="showMessage">This is a conditional message.</p>
+  `
+})
+export class ConditionalDisplayComponent {
+  showMessage = false;
+
+  toggleMessage() {
+    this.showMessage = !this.showMessage;
+  }
+}
+
+/*
+ * Explanation:
+ * - `*ngIf` is a built-in structural directive that adds/removes elements based on a condition.
+ * - The paragraph (`<p>`) is displayed only when `showMessage` is true.
+ * - Clicking the button toggles the value of `showMessage`, showing or hiding the message.
+ */
+
+
+// Example 3: Custom Structural Directive (appUnless)
+import { Directive, TemplateRef, ViewContainerRef, Input } from '@angular/core';
+
+@Directive({
+  selector: '[appUnless]'
+})
+export class UnlessDirective {
+  constructor(private templateRef: TemplateRef<any>, private viewContainer: ViewContainerRef) {}
+
+  @Input() set appUnless(condition: boolean) {
+    if (!condition) {
+      this.viewContainer.createEmbeddedView(this.templateRef);
+    } else {
+      this.viewContainer.clear();
+    }
+  }
+}
+
+/*
+ * Explanation:
+ * - This directive works similarly to `*ngIf`, but it displays the element when the condition is FALSE.
+ * - `@Input() set appUnless(condition: boolean)`: Checks the condition and either adds or removes the template from the view.
+ * - `createEmbeddedView()` renders the template when the condition is false.
+ * - `clear()` removes it when the condition is true.
+ */
+
+// Usage in an HTML file:
+// <p *appUnless="isLoggedIn">You are not logged in</p>
+
+
+
+Key Differences:
+Component:
+- A component is a directive with a template (HTML) attached. 
+- It defines a UI element with behavior, styles, and structure.
+- Always uses the @Component decorator.
+
+Example:
+@Component({
+  selector: 'app-example',
+  template: `<h1>Hello, Angular!</h1>`,
+  styles: [`h1 { color: blue; }`]
+})
+export class ExampleComponent {}
+
+Directive:
+- A directive extends or modifies the behavior of existing DOM elements.
+- It does not have a template of its own.
+- Uses the @Directive decorator.
+
+Three types:
+(a) Attribute Directives (e.g., appHighlight)
+(b) Structural Directives (e.g., *ngIf, *ngFor)
+(c) Custom Structural Directives (e.g., appUnless)
+
+Relationship Between Components and Directives:
+- Every Component is technically a Directive, but not every Directive is a Component.
+- Directives modify elements, while components define UI structures.
