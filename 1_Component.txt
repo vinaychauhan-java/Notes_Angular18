@@ -1,0 +1,22 @@
+/*
+ * Components in Angular 18
+ */
+
+// A component in Angular is a building block of the UI. It consists of an HTML template, a TypeScript class, and a CSS file.
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-hello-world',
+  template: `<h1>Hello, World!</h1>`,
+  styles: [`h1 { color: blue; }`]
+})
+export class HelloWorldComponent {}
+
+/*
+ * Explanation:
+ * - The `@Component` decorator marks a class as an Angular component.
+ * - `selector`: Defines the custom HTML tag (`<app-hello-world>`) to use this component.
+ * - `template`: The HTML content to be rendered.
+ * - `styles`: The CSS styles applied to this component.
+ */
