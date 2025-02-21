@@ -1,0 +1,74 @@
+/*
+ * Attribute Directives in Angular 18
+ */
+
+// Attribute Directives modify the appearance or behavior of an element dynamically.
+// Common Attribute Directives: [ngClass], [ngStyle], [ngModel], custom directives
+
+import { Component, Directive, ElementRef, Renderer2, HostListener, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-attribute-directives',
+  template: `
+    <h2>Attribute Directives Example</h2>
+
+    <!-- [ngClass] Example -->
+    <p [ngClass]="{ 'highlight': isHighlighted, 'bold-text': isBold }">
+      This text changes style dynamically.
+    </p>
+    <button (click)="toggleHighlight()">Toggle Highlight</button>
+
+    <!-- [ngStyle] Example -->
+    <p [ngStyle]="{ 'color': textColor, 'font-size': fontSize + 'px' }">
+      Styled dynamically using ngStyle.
+    </p>
+    <button (click)="changeStyle()">Change Style</button>
+
+    <!-- Custom Directive Example -->
+    <p appHighlight="lightblue">This text has a custom directive applied.</p>
+  `,
+  styles: [
+    `.highlight { background-color: yellow; }`,
+    `.bold-text { font-weight: bold; }`
+  ]
+})
+export class AttributeDirectivesComponent {
+  isHighlighted = false;
+  isBold = true;
+  textColor = 'blue';
+  fontSize = 16;
+
+  toggleHighlight() {
+    this.isHighlighted = !this.isHighlighted;
+  }
+
+  changeStyle() {
+    this.textColor = this.textColor === 'blue' ? 'red' : 'blue';
+    this.fontSize = this.fontSize === 16 ? 20 : 16;
+  }
+}
+
+/* Custom Attribute Directive */
+@Directive({
+  selector: '[appHighlight]'
+})
+export class HighlightDirective {
+  @Input('appHighlight') highlightColor: string = 'yellow';
+
+  constructor(private el: ElementRef, private renderer: Renderer2) {}
+
+  @HostListener('mouseenter') onMouseEnter() {
+    this.renderer.setStyle(this.el.nativeElement, 'backgroundColor', this.highlightColor);
+  }
+
+  @HostListener('mouseleave') onMouseLeave() {
+    this.renderer.removeStyle(this.el.nativeElement, 'backgroundColor');
+  }
+}
+
+/*
+ * Explanation:
+ * - `[ngClass]`: Dynamically applies CSS classes based on conditions.
+ * - `[ngStyle]`: Dynamically applies inline styles to an element.
+ * - `appHighlight` (Custom Directive): Highlights text when hovered, using Renderer2 for DOM manipulation.
+ */
