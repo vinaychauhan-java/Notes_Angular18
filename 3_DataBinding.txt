@@ -1,0 +1,39 @@
+// Data Binding in Angular 18
+/*
+ * Data binding is a mechanism to synchronize data between the component and the template.
+ * There are four types of data binding:
+ * 1. Interpolation (`{{ }}`) - Binds data from the component to the template.
+ * 2. Property Binding (`[ ]`) - Binds properties from the component to the DOM.
+ * 3. Event Binding (`( )`) - Captures user events like clicks and inputs.
+ * 4. Two-way Binding (`[( )]`) - Synchronizes data between the component and the template.
+ */
+
+@Component({
+  selector: 'app-data-binding',
+  template: `
+    <h2>{{ message }}</h2> <!-- Interpolation -->
+    <input [value]="message" /> <!-- Property Binding -->
+    <button (click)="changeMessage()">Click Me</button> <!-- Event Binding -->
+    <input [(ngModel)]="message" /> <!-- Two-way Binding -->
+  `,
+  styles: [`h2 { color: green; }`]
+})
+export class DataBindingComponent {
+  message: string = "Hello, Data Binding!";
+
+  changeMessage() {
+    this.message = "You clicked the button!";
+  }
+}
+
+/*
+ * Explanation:
+ * - Interpolation `{{ message }}`: Displays component data in the template.
+ * - Property Binding `[value]="message"`: Binds the value property of the input to the component.
+ * - Event Binding `(click)="changeMessage()"`: Calls `changeMessage()` on button click.
+ * - Two-way Binding `[(ngModel)]="message"`: Synchronizes input field with `message`.
+ */
+
+// Make sure to import FormsModule in app.module.ts to use ngModel:
+// import { FormsModule } from '@angular/forms';
+// @NgModule({ imports: [FormsModule] })
