@@ -1,0 +1,57 @@
+/*
+ * Structural Directives in Angular 18
+ */
+
+// Structural Directives shape or modify the DOM structure dynamically.
+// Common Structural Directives: *ngIf, *ngFor, *ngSwitch
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-structural-directives',
+  template: `
+    <h2>Structural Directives Example</h2>
+
+    <!-- *ngIf with else Example -->
+    <button (click)="toggleMessage()">Toggle Message</button>
+    <ng-container *ngIf="showMessage; else elseBlock">
+      <p>This message is conditionally displayed.</p>
+    </ng-container>
+    <ng-template #elseBlock>
+      <p>The message is hidden.</p>
+    </ng-template>
+    
+    <!-- *ngFor Example -->
+    <ul>
+      <li *ngFor="let item of items">{{ item }}</li>
+    </ul>
+
+    <!-- *ngSwitch Example -->
+    <div [ngSwitch]="status">
+      <p *ngSwitchCase="'active'">Status: Active</p>
+      <p *ngSwitchCase="'inactive'">Status: Inactive</p>
+      <p *ngSwitchDefault>Status: Unknown</p>
+    </div>
+  `,
+  styles: [`h2 { color: blue; }`]
+})
+export class StructuralDirectivesComponent {
+  showMessage = false;
+  items = ['Item 1', 'Item 2', 'Item 3'];
+  status = 'active';
+
+  toggleMessage() {
+    this.showMessage = !this.showMessage;
+  }
+}
+
+/*
+ * Explanation:
+ * - `*ngIf`: Conditionally includes or removes an element from the DOM.
+ *   - Now includes `else` with `<ng-template>` to display alternate content.
+ * - `*ngFor`: Loops through an array and renders an element for each item.
+ *   - Displays a list of items dynamically.
+ * - `*ngSwitch`: Acts like a switch-case statement for rendering different content based on a condition.
+ *   - Displays different `<p>` elements based on the `status` value.
+ * - <ng-container> is an Angular element that does not render any actual HTML in the DOM but allows structural directives like *ngIf to work without adding unnecessary elements.
+ */
