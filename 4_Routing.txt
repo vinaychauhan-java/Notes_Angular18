@@ -1,0 +1,98 @@
+Routing in Angular 18 is a mechanism that enables navigation between different views or components in a Single Page Application (SPA). 
+It allows developers to define multiple routes and map them to different components, enabling seamless transitions without requiring a full page reload.
+
+1. Install and Configure RouterModule
+
+    import { NgModule } from '@angular/core';
+    import { RouterModule, Routes } from '@angular/router';
+    import { HomeComponent } from './home/home.component';
+    import { AboutComponent } from './about/about.component';
+    import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+
+    const routes: Routes = [
+        { path: '', component: HomeComponent }, // Default route
+        { path: 'about', component: AboutComponent }, // Static route
+        { path: '**', component: PageNotFoundComponent } // Wildcard route for 404
+    ];
+
+    @NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
+    })
+    export class AppRoutingModule { }
+
+2. Use Router Outlet in App Component
+    In app.component.html, use the <router-outlet> to load different components dynamically.
+
+    <nav>
+        <a routerLink="/">Home</a>
+        <a routerLink="/about">About</a>
+    </nav>
+
+    <router-outlet></router-outlet>
+ 
+ 3. Navigate Programmatically
+    Use Router service to navigate within components.
+
+    import { Component } from '@angular/core';
+    import { Router } from '@angular/router';
+    @Component({
+        selector: 'app-navigation',
+        template: `<button (click)="goToAbout()">Go to About</button>`
+    })
+    export class NavigationComponent {
+    constructor(private router: Router) {}
+        goToAbout() {
+            this.router.navigate(['/about']);
+        }
+    }
+
+Advanced Routing Concepts
+1. Route Parameters
+    Pass dynamic values in the URL.
+    { path: 'product/:id', component: ProductComponent }
+
+    Retrieve the parameter in ProductComponent:
+    import { ActivatedRoute } from '@angular/router';
+    
+    constructor(private route: ActivatedRoute) {}
+    
+    ngOnInit() {
+        this.route.params.subscribe(params => {
+            console.log(params['id']); // Access the dynamic ID
+        });
+    }
+
+2. Lazy Loading
+    Load modules only when required.
+    { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) }
+
+
+3. Route Guards
+    Protect routes using canActivate guard.
+
+    import { Injectable } from '@angular/core';
+    import { CanActivate, Router } from '@angular/router';
+
+    @Injectable({
+    providedIn: 'root'
+    })
+    export class AuthGuard implements CanActivate {
+        constructor(private router: Router) {}
+
+        canActivate(): boolean {
+            if (/* Check authentication */) {
+                return true;
+            } else {
+                this.router.navigate(['/login']);
+                return false;
+            }
+        }
+    }
+    
+    Apply the guard:
+    { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] }
+
+Conclusion
+Angular 18 routing enables seamless navigation in SPAs with a variety of powerful features such as lazy loading, route guards, and dynamic parameters.
+By setting up RouterModule properly and leveraging features like routerLink and router-outlet, we can create efficient and scalable applications.

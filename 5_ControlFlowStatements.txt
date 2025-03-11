@@ -1,0 +1,71 @@
+Control Flow Statements in Angular 18 are a modern alternative to traditional structural directives like *ngIf, *ngFor, and *ngSwitch.
+They provide a more intuitive and optimized way to manage conditional rendering and loops inside Angular templates.
+
+Types of Control Flow Statements in Angular 18
+@if – Conditional rendering (Replaces *ngIf)
+@for – Iterating over arrays (Replaces *ngFor)
+@switch – Multi-condition rendering (Replaces *ngSwitch)
+
+1. @if Statement (Replaces *ngIf)
+
+- HTML Code
+    <button (click)="toggleMessage()">Toggle Message</button>
+
+    @if (showMessage) {
+        <p>The message is visible!</p>
+    } @else {
+        <p>The message is hidden!</p>
+    }
+
+- Component Code
+    import { Component } from '@angular/core';
+    @Component({
+        selector: 'app-control-flow',
+        templateUrl: './control-flow.component.html'
+    })
+    export class ControlFlowComponent {
+        showMessage = true;
+
+        toggleMessage() {
+            this.showMessage = !this.showMessage;
+        }
+    }
+
+2. @for Statement (Replaces *ngFor)
+
+- HTML Code
+    <ul>
+    @for (product of products; track product.id) {
+        <li>{{ product.name }} - ${{ product.price }}</li>
+    }
+    </ul>
+
+- Component Code
+    export class ControlFlowComponent {
+    products = [
+            { id: 1, name: 'Laptop', price: 1000 },
+            { id: 2, name: 'Phone', price: 500 },
+            { id: 3, name: 'Tablet', price: 300 }
+        ];
+    }
+
+3. @switch Statement (Replaces *ngSwitch)
+
+- HTML Code
+    <select [(ngModel)]="status">
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+        <option value="unknown">Unknown</option>
+    </select>
+
+    @switch (status) {
+    @case ('active') { <p>Status: Active</p> }
+    @case ('inactive') { <p>Status: Inactive</p> }
+    @default { <p>Status: Unknown</p> }
+    }
+
+
+- Componenet Code
+    export class ControlFlowComponent {
+    status = 'active';
+    }
